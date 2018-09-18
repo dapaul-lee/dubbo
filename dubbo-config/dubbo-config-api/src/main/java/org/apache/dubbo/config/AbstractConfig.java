@@ -98,6 +98,9 @@ public abstract class AbstractConfig implements Serializable {
         return value;
     }
 
+    /*
+    * 要在父类中处理子类的内容，只能用反射的方式处理
+    * */
     protected static void appendProperties(AbstractConfig config) {
         if (config == null) {
             return;
@@ -112,6 +115,9 @@ public abstract class AbstractConfig implements Serializable {
                     String property = StringUtils.camelToSplitName(name.substring(3, 4).toLowerCase() + name.substring(4), ".");
 
                     String value = null;
+                    /*
+                    * 优先级最高，会覆盖Config中的初始值
+                    * */
                     if (config.getId() != null && config.getId().length() > 0) {
                         String pn = prefix + config.getId() + "." + property;
                         value = System.getProperty(pn);
@@ -119,6 +125,9 @@ public abstract class AbstractConfig implements Serializable {
                             logger.info("Use System Property " + pn + " to config dubbo");
                         }
                     }
+                    /*
+                    * 会覆盖config中的初始值
+                    * */
                     if (value == null || value.length() == 0) {
                         String pn = prefix + property;
                         value = System.getProperty(pn);
@@ -139,6 +148,9 @@ public abstract class AbstractConfig implements Serializable {
                         }
                         if (getter != null) {
                             if (getter.invoke(config) == null) {
+                                /*
+                                * 只有当Config初始值为空时，才会生效，优先级较低
+                                * */
                                 if (config.getId() != null && config.getId().length() > 0) {
                                     value = ConfigUtils.getProperty(prefix + config.getId() + "." + property);
                                 }
@@ -181,6 +193,10 @@ public abstract class AbstractConfig implements Serializable {
         appendParameters(parameters, config, null);
     }
 
+    /*
+    * 这里的 config 为什么不用 AbstractConfig 类型？ 这里解析的是其他类型的配置文件么？
+    * 将 config 中的配置追加到 parameters 中, 其中涉及到 annotation 的解析
+    * */
     @SuppressWarnings("unchecked")
     protected static void appendParameters(Map<String, String> parameters, Object config, String prefix) {
         if (config == null) {
