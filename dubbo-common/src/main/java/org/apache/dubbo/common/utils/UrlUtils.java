@@ -32,6 +32,9 @@ public class UrlUtils {
      */
     private final static String URL_PARAM_STARTING_SYMBOL = "?";
 
+    /*
+    * 将 address 解析为 URL, 并将 url 中为空的参数用 defaults 中的值填充
+    * */
     public static URL parseURL(String address, Map<String, String> defaults) {
         if (address == null || address.length() == 0) {
             return null;
@@ -53,6 +56,9 @@ public class UrlUtils {
                 url += URL_PARAM_STARTING_SYMBOL + Constants.BACKUP_KEY + "=" + backup.toString();
             }
         }
+        /*
+        * 默认的协议是 dubbo
+        * */
         String defaultProtocol = defaults == null ? null : defaults.get("protocol");
         if (defaultProtocol == null || defaultProtocol.length() == 0) {
             defaultProtocol = "dubbo";

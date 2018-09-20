@@ -50,6 +50,9 @@ public abstract class AbstractInterfaceConfig extends AbstractMethodConfig {
 
     private static final long serialVersionUID = -1559314110797223229L;
 
+    /*
+    * 为什么这参数都是 String 类型的？
+    * */
     // local impl class name for the service interface
     protected String local;
 
@@ -159,6 +162,9 @@ public abstract class AbstractInterfaceConfig extends AbstractMethodConfig {
         }
     }
 
+    /*
+    * 注册中心应该是用 URL 来表示
+    * */
     protected List<URL> loadRegistries(boolean provider) {
         checkRegistry();
         List<URL> registryList = new ArrayList<URL>();
@@ -168,6 +174,9 @@ public abstract class AbstractInterfaceConfig extends AbstractMethodConfig {
                 if (address == null || address.length() == 0) {
                     address = Constants.ANYHOST_VALUE;
                 }
+                /*
+                * System.properties 中的值是什么时候设置进去的?
+                * */
                 String sysaddress = System.getProperty("dubbo.registry.address");
                 if (sysaddress != null && sysaddress.length() > 0) {
                     address = sysaddress;

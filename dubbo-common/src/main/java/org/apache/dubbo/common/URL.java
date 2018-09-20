@@ -202,6 +202,9 @@ public /**final**/ class URL implements Serializable {
                     }
                 }
             }
+            /*
+            *  把 host 提取出来
+            * */
             url = url.substring(0, i);
         }
         i = url.indexOf("://");
